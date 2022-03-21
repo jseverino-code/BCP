@@ -1,0 +1,48 @@
+version: '3.3'
+services:
+  db:
+    image: mysql:latest
+    container_name: 'dbcontainer'
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'bcp'
+      MYSQL_USER: 'mysqluser'
+      MYSQL_PASSWORD: 'secreto'
+      MYSQL_ROOT_PASSWORD: 'password'
+    security_opt:
+      - seccomp:unconfined
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+    ports:
+      - '13306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+    networks:
+      - backend
+  api:
+    build: ./conversor
+    restart: always
+    container_name: 'apicontainer'
+    volumes:
+      - my-api:/bcp/api
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:mysql://db:3306/bcp'
+      SPRING_DATASOURCE_USERNAME: 'mysqluser'
+      SPRING_DATASOURCE_PASSWORD: 'secreto'
+    ports:
+      - '5001:8080'
+    expose:
+      - '8080'
+    depends_on:
+      - db
+    networks:
+      - backend
+# Names our volume
+volumes:
+  my-db:
+  my-api:
+networks:
+  backend:
+    driver: 'bridge'
