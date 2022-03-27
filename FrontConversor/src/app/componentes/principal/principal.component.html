@@ -1,0 +1,59 @@
+<div class="box">
+    <div class="panel">
+        <img src="../../../assets/logo-cajamarca-bcp.jpg" class="separadosControles" />
+        <div class="controles">
+            <br />
+            <mat-form-field appearance="outline" class="separadosControles">
+                <mat-label>Monto</mat-label>
+                <input matInput name="monto" placeholder="Monto" required [(ngModel)]="model.monto">
+            </mat-form-field>
+            <br />
+            <mat-form-field class="separadosControles" appearance="fill">
+                <mat-label>Fecha</mat-label>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="fechaCotizacion">
+                <mat-datepicker-toggle matSuffix [for]="picker">
+                  <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            <br />
+            <mat-form-field appearance="fill" class="separadosControles">
+               <mat-label>Desde la Divisa</mat-label>
+               <mat-select [(ngModel)]="model.monedaOrigen" name="monedaOrigen">
+                 <mat-option *ngFor="let divisa of lstMonedas" [value]="divisa.codigo">
+                  {{divisa.codigo}} - {{divisa.nombre}}
+                 </mat-option>
+               </mat-select>
+            </mat-form-field>
+            <br />
+            <mat-form-field appearance="fill" class="separadosControles">
+                <mat-label>Hacia la Divisa</mat-label>
+                <mat-select [(ngModel)]="model.monedaDestino" name="monedaDestino">
+                  <mat-option *ngFor="let divisa of lstMonedas" [value]="divisa.codigo">
+                    {{divisa.codigo}} - {{divisa.nombre}}
+                  </mat-option>
+                </mat-select>
+             </mat-form-field>
+
+             <button mat-fab color="primary" aria-label="Convertir" (click)="Calcular()">
+              <mat-icon>currency_exchange</mat-icon>
+            </button>
+        </div>
+    </div>
+    
+    <div class="panelRespuesta" *ngIf="MostrarResultado">
+        <div><h3>Detalle de Conversión</h3></div>
+        <br />
+        <div>Monto:</div><div style="font-weight: bold;">{{respuestaProcesada.montoOrigen}}</div>
+        <br />
+        <div>Moneda Origen:</div><div>{{respuestaProcesada.monedaOrigen}} - {{respuestaProcesada.monedaDescripcionOrigen}}</div>
+        <br />
+        <div>Moneda Destino:</div><div>{{respuestaProcesada.monedaDestino}} - {{respuestaProcesada.monedaDescripcionDestino}}</div>
+        <br />
+        <div>Fecha Tipo de Cambio:</div><div>{{respuestaProcesada.fecha}}</div>
+        <br />
+        <div>Tipo de Cambio</div><div style="color: red; font-weight: bold;">{{respuestaProcesada.cotizacion}}</div>
+        <br />
+        <div>Monto Convertido</div><div style="font-weight: bold;">{{respuestaProcesada.montoDestino}}</div>
+    </div>
+</div>

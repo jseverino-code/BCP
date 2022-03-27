@@ -39,10 +39,26 @@ services:
       - db
     networks:
       - backend
+  web:
+    build: ./FrontConversor
+    restart: always
+    container_name: web-angular
+    volumes:
+      - my-web:/bcp/web
+    ports:
+      - '8080:80'
+    expose:
+      - '80'
+    depends_on:
+      - db
+      - api
+    networks:
+      - backend
 # Names our volume
 volumes:
   my-db:
   my-api:
+  my-web:
 networks:
   backend:
     driver: 'bridge'
